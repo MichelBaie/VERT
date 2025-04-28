@@ -1,0 +1,52 @@
+# .github/workflows/deploy.yml
+name: Déploiement GitHub Pages
+
+# Déclencheurs d'exécution
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Permissions nécessaires pour Pages
+permissions:
+  contents: read        # Lecture du repo
+  pages: write          # Écriture sur GitHub Pages
+  id-token: write       # Requis par actions/configure-pages
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout du code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Installation de Bun
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # 3. Installation des dépendances & build
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build for production
+        run: bun run build
+
+      # 4. Activation de GitHub Pages
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
+      # 5. Upload des fichiers statiques
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+      # 6. Déploiement sur GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
