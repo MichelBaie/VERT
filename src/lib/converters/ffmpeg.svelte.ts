@@ -20,7 +20,7 @@ export class FFmpegConverter extends Converter {
 		new FormatInfo("wma", true, true),
 		new FormatInfo("amr", true, true),
 		new FormatInfo("ac3", true, true),
-		new FormatInfo("alac", true, true),
+		new FormatInfo("alac", true, false),
 		new FormatInfo("aiff", true, true),
 	];
 
